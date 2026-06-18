@@ -12,7 +12,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "^11.7.0",
+      "version": "11.7.0",
       "onFail": "download"
     }
   },
@@ -23,6 +23,7 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "tsx": "^4.22.4"
   }
 }
