@@ -1,7 +1,13 @@
 import { Router } from 'express';
+import { verifyJWT } from '../middlewares/verifyJWT.js';
+import { checkPlanLimit } from '../middlewares/checkLimitPlan.js';
+import * as ClientsController from '../controllers/clients.controller.js';
+
 const router = Router();
-router.get('/',    (req, res) => res.json({ message: 'list clients ok' }));
-router.post('/',   (req, res) => res.status(201).json({ message: 'create client ok', body: req.body }));
-router.patch('/:id',         (req, res) => res.json({ message: `update ${req.params.id} ok` }));
-router.patch('/:id/archive', (req, res) => res.json({ message: `archive ${req.params.id} ok` }));
+
+router.get('/', verifyJWT, ClientsController.list);
+router.post('/', verifyJWT, checkPlanLimit('create_client'), ClientsController.create);
+router.patch('/:id', verifyJWT, ClientsController.update);
+router.patch('/:id/archive', verifyJWT, ClientsController.archive);
+
 export default router;

@@ -1,6 +1,12 @@
 import { supabase } from '../config/supabase.js';
 
-export async function createClient(agencyId, data) {
+interface ClientInput {
+  name: string;
+  email: string;
+  website?: string;
+}
+
+export async function createClient(agencyId: string, data: ClientInput) {
   const { data: client, error } = await supabase
     .from('clients')
     .insert({ ...data, agency_id: agencyId, status: 'active' })
@@ -10,7 +16,7 @@ export async function createClient(agencyId, data) {
   return client;
 }
 
-export async function listClients(agencyId, status = 'active') {
+export async function listClients(agencyId: string, status: string = 'active') {
   const query = supabase
     .from('clients')
     .select('id, name, email, website, status, created_at')
@@ -24,7 +30,7 @@ export async function listClients(agencyId, status = 'active') {
   return data;
 }
 
-export async function updateClient(agencyId, clientId, data) {
+export async function updateClient(agencyId: string, clientId: string, data: Partial<ClientInput>) {
   const { data: client, error } = await supabase
     .from('clients')
     .update(data)
@@ -37,6 +43,6 @@ export async function updateClient(agencyId, clientId, data) {
   return client;
 }
 
-export async function archiveClient(agencyId, clientId) {
-  return updateClient(agencyId, clientId, { status: 'archived' });
+export async function archiveClient(agencyId: string, clientId: string) {
+  return updateClient(agencyId, clientId, { status: 'archived' } as Partial<ClientInput>);
 }

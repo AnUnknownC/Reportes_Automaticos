@@ -2,12 +2,11 @@ import { z } from 'zod';
 import * as ClientsService from '../services/clients.service.js';
 
 const clientSchema = z.object({
-  name:    z.string().min(2),
-  email:   z.string().email(),
+  name: z.string().min(2),
+  email: z.string().email(),
   website: z.string().url().optional(),
 });
-
-const updateSchema = clientSchema.partial(); // todos los campos opcionales al editar
+const updateSchema = clientSchema.partial();
 
 export async function create(req, res) {
   const parsed = clientSchema.safeParse(req.body);
@@ -16,7 +15,7 @@ export async function create(req, res) {
   try {
     const client = await ClientsService.createClient(req.agency.agency_id, parsed.data);
     res.status(201).json(client);
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Error interno' });
   }
 }
@@ -27,9 +26,9 @@ export async function list(req, res) {
     : 'active';
 
   try {
-    const clients = await ClientsService.listClients(req.agency.agency_id, { status });
+    const clients = await ClientsService.listClients(req.agency.agency_id, status);
     res.json(clients);
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Error interno' });
   }
 }

@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase';
+import { supabase } from '../config/supabase.js';
 import { PLAN_LIMITS } from '../services/auth.service';
 import { Request, Response, NextFunction } from 'express'
 
