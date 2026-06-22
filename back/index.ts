@@ -1,24 +1,38 @@
-import 'dotenv/config'
-import express from 'express'
-import {errorHandler} from './src/middlewares/error.middleware'
-import authRoutes from './src/routes/auth.routes'
-import clientsRoutes from './src/routes/clients.routes.js'
+  import 'dotenv/config'
+  import express from 'express'
+  import {errorHandler} from './src/middlewares/error.middleware'
+  import authRoutes from './src/routes/auth.routes'
+  import clientsRoutes from './src/routes/clients.routes'
+  import googleRoutes from './src/routes/google.routes'
+  import cors from 'cors'
 
 
-const app = express()
-const PORT = process.env.PORT || 3000
 
-app.use(express.json())
+  const app = express()
+  const PORT = process.env.PORT || 3000
+
+  app.use(express.json())
 
 
-app.get('/', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() })
-})
-app.use('/api/auth', authRoutes)
-app.use('/api/clients', clientsRoutes)
-app.use(errorHandler)
+  app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+  }))
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`)
-})
+
+  app.get('/', (_req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() })
+  })
+  app.use('/api/auth/google', googleRoutes)
+  app.use('/api/auth', authRoutes)
+  app.use('/api/clients', clientsRoutes)
+
+
+  app.use(errorHandler)
+
+
+
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`)
+  })
 
